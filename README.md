@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://klip.ly"><strong>🌐 Visit Klip.ly</strong></a> •
   <a href="#self-hosting"><strong>📖 Self-Hosting Guide</strong></a> •
-  <a href="https://github.com/kliply/kliply/issues"><strong>🐛 Report Issues</strong></a> •
+  <a href="https://github.com/francescovaglia/kliply/issues"><strong>🐛 Report Issues</strong></a> •
   <a href="#contributing"><strong>🤝 Contribute</strong></a>
 </p>
 
@@ -57,7 +57,7 @@
 ## 📖 Self-Hosting Guide
 
 Want full control? **You can self-host Klip.ly!** 🔧  
-[Read the self-hosting guide](https://klip.ly/docs/self-hosting) to install it locally.  
+[Read the self-hosting guide](https://klip.ly/self-host) to install it locally.  
 
 🛠️ **Setup includes:**  
 1. Download the extension `.zip`  
@@ -81,8 +81,8 @@ This means any modifications or services built on Klip.ly must also be open-sour
 We ❤️ contributions! Here's how you can help:  
 
 - ⭐ **Star this repo** – more stars = more exposure!  
-- 🐛 **Report bugs** – Open an [issue](https://github.com/kliply/issues).  
-- ⚡ **Enhance features** – Submit a [pull request](https://github.com/kliply/pulls).  
+- 🐛 **Report bugs** – Open an [issue](https://github.com/francescovaglia/kliply/issues).  
+- ⚡ **Enhance features** – Submit a [pull request](https://github.com/francescovaglia/kliply/pulls).  
 - 🔥 **Spread the word** – Share Klip.ly with others!  
 
 ---
@@ -105,7 +105,7 @@ Special thanks to:
 ---
 
 <p align="center">
-  <a href="https://github.com/kliply">
+  <a href="https://github.com/francescovaglia/kliply">
     <img src="https://contrib.rocks/image?repo=francescovaglia/kliply" />
   </a>
 </p>
