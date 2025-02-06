@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "Klip.ly | YouTube Video Summarizer",
+    "version": "1.0",
+    "description": "Summarize YouTube videos directly from the video page.",
+    "permissions": [
+        "storage"
+    ],
+    "icons": {
+        "128": "logo128.png"
+    },
+    "host_permissions": [
+        "*://*.youtube.com/*",
+        "http://localhost:3000/*",
+        "http://localhost:8000/*",
+        "https://api.klip.ly/*",
+        "https://klip.ly/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "Summarize Video",
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.youtube.com/*"
+            ],
+            "js": [
+                "transcript.js",
+                "content.js"
+            ],
+            "css": [
+                "styles.css"
+            ]
+        }
+    ]
+}
