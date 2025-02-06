@@ -106,7 +106,7 @@ Special thanks to:
 
 <p align="center">
   <a href="https://github.com/kliply">
-    <img src="https://contrib.rocks/image?repo=kliply/kliply" />
+    <img src="https://contrib.rocks/image?repo=francescovaglia/kliply" />
   </a>
 </p>
 
