@@ -149,14 +149,15 @@ function getCheckmarkIcon() {
 
 // Core functionality
 async function fetchSummary(transcript) {
-  const { summaryStyle } = await chrome.storage.sync.get('summaryStyle');
+  const { summaryStyle, preferredLanguage } = await chrome.storage.sync.get(['summaryStyle', 'preferredLanguage']);
 
   if (!apiKey) {
     alert('API key not set. Please set it in the extension popup.');
     throw new Error('API key not set.');
   }
 
-  const stylePrompt = getPromptForStyle(summaryStyle);
+  const systemPrompt = getSystemPrompt(summaryStyle, preferredLanguage);
+  console.log(systemPrompt)
   const response = await fetch(OPENAI_CONFIG.API_URL, {
     method: 'POST',
     headers: {
@@ -166,7 +167,7 @@ async function fetchSummary(transcript) {
     body: JSON.stringify({
       model: OPENAI_CONFIG.MODEL,
       messages: [
-        { role: 'system', content: stylePrompt },
+        { role: 'system', content: systemPrompt },
         { role: 'user', content: transcript },
       ],
       max_tokens: OPENAI_CONFIG.MAX_TOKENS,
@@ -182,13 +183,13 @@ async function fetchSummary(transcript) {
   return data.choices[0].message.content.trim();
 }
 
-function getPromptForStyle(style) {
+function getSystemPrompt(style, language) {
   const prompt = style === 'bullet-points' ? PROMPTS.BULLET_POINTS
     : style === 'summary' ? PROMPTS.SUMMARY
-      : style === 'detailed' ? PROMPTS.DETAILED
+      : style === 'detailed-summary' ? PROMPTS.DETAILED
         : PROMPTS.BULLET_POINTS;
 
-  return prompt + ' Send back only HTML tags, without "```html" and "```".';
+  return `${prompt} Send back only HTML tags, without 'html' and ''. Use ${language} as the response language, where ${language} is a variable (e.g., 'russian', 'english'). If ${language} is empty or undefined, detect the most relevant language based on context..`
 }
 
 // UI Components
@@ -258,7 +259,17 @@ function handleButtonHover(button, isEnter) {
   }
 }
 
-function handleButtonClick(button) {
+async function getTranscript(videoId) {
+  try {
+    const transcript = await window.YoutubeTranscript.fetchTranscript(videoId);
+    return transcript.map(entry => entry.text).join(' ');
+  } catch (error) {
+    console.error('Error fetching transcript:', error);
+    throw new Error('Failed to fetch transcript.');
+  }
+}
+
+async function handleButtonClick(button) {
   const videoId = new URLSearchParams(window.location.search).get('v');
   if (!videoId) {
     alert('Could not retrieve video ID.');
@@ -302,20 +313,21 @@ function handleButtonClick(button) {
   `;
   button.style.backgroundColor = UI_STYLES.BUTTON.PROCESSING.backgroundColor;
 
-  fetchSummary(videoId)
-    .then(summary => {
-      button.innerHTML = getButtonContent('Summarized', true);
-      button.style.backgroundColor = UI_STYLES.BUTTON.SUCCESS.backgroundColor;
-      displaySummary(summary);
-      summarizedVideos.add(videoId);
-    })
-    .catch(error => {
-      console.error('Error fetching or summarizing:', error);
-      alert('Failed to fetch or summarize the transcript.');
-      button.innerHTML = originalContent;
-      button.style.backgroundColor = UI_STYLES.BUTTON.DEFAULT.backgroundColor;
-      button.disabled = false;
-    });
+  try {
+    const transcript = await getTranscript(videoId);
+    const summary = await fetchSummary(transcript);
+	
+    button.innerHTML = getButtonContent('Summarized', true);
+    button.style.backgroundColor = UI_STYLES.BUTTON.SUCCESS.backgroundColor;
+    displaySummary(summary);
+    summarizedVideos.add(videoId);
+  } catch (error) {
+    console.error('Error fetching or summarizing:', error);
+    alert('Failed to fetch or summarize the transcript.');
+    button.innerHTML = originalContent;
+    button.style.backgroundColor = UI_STYLES.BUTTON.DEFAULT.backgroundColor;
+    button.disabled = false;
+  }
 }
 
 function displaySummary(summary) {

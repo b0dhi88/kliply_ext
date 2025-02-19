@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Get all DOM elements
   const toggleBtn = document.getElementById('toggle-visibility');
   const apiKeyInput = document.getElementById('api-key');
+  const preferredLanguageInput = document.getElementById('preferred-language');
   const saveKeyBtn = document.getElementById('save-key');
   const statusDiv = document.getElementById('status');
   const summaryStyleSelect = document.getElementById('summary-style');
@@ -28,9 +29,10 @@ document.addEventListener('DOMContentLoaded', function () {
   saveKeyBtn?.addEventListener('click', handleSaveKey);
 
   async function initializePopup() {
-    const { apiKey, summaryStyle } = await chrome.storage.sync.get(['apiKey', 'summaryStyle']);
+    const { apiKey, summaryStyle, preferredLanguage } = await chrome.storage.sync.get(['apiKey', 'summaryStyle', 'preferredLanguage']);
     if (apiKey) apiKeyInput.value = apiKey;
     if (summaryStyle) summaryStyleSelect.value = summaryStyle;
+    if (preferredLanguage) preferredLanguageInput.value = preferredLanguage;
   }
 
   function toggleVisibility() {
@@ -41,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function handleSaveKey() {
     const apiKey = apiKeyInput.value.trim();
+    const preferredLanguage = preferredLanguageInput.value.trim();
     const summaryStyle = summaryStyleSelect.value;
 
     if (!apiKey) {
@@ -55,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chrome.storage.sync.set({
       apiKey,
-      summaryStyle
+      summaryStyle,
+      preferredLanguage
     }, () => {
       showStatus('Settings saved successfully!', 'success');
     });
