@@ -185,7 +185,7 @@ async function fetchSummary(transcript) {
 function getSystemPrompt(style, language) {
   const prompt = style === 'bullet-points' ? PROMPTS.BULLET_POINTS
     : style === 'summary' ? PROMPTS.SUMMARY
-      : style === 'detailed-summary' ? PROMPTS.DETAILED
+      : style === 'detailed' ? PROMPTS.DETAILED
         : PROMPTS.BULLET_POINTS;
 
   return `${prompt} Send back only HTML tags, without 'html' and ''. Use ${language} as the response language, where ${language} is a variable (e.g., 'russian', 'english'). If ${language} is empty or undefined, detect the most relevant language based on context..`
