@@ -157,7 +157,6 @@ async function fetchSummary(transcript) {
   }
 
   const systemPrompt = getSystemPrompt(summaryStyle, preferredLanguage);
-  console.log(systemPrompt)
   const response = await fetch(OPENAI_CONFIG.API_URL, {
     method: 'POST',
     headers: {
@@ -264,7 +263,6 @@ async function getTranscript(videoId) {
     const transcript = await window.YoutubeTranscript.fetchTranscript(videoId);
     return transcript.map(entry => entry.text).join(' ');
   } catch (error) {
-    console.error('Error fetching transcript:', error);
     throw new Error('Failed to fetch transcript.');
   }
 }
